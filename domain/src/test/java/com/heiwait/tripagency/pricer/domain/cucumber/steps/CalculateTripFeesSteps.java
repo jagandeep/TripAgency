@@ -14,11 +14,7 @@ import java.util.Locale;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class CalculateTripFeesSteps {
-
-    @Mock
-    private TripRepositoryPort tripRepositoryPort;
-    @InjectMocks
-    private TripPricer tripPricer;
+    private final TripPricer tripPricer = new TripPricer();
 
     private Destination destination;
     private TravelClass travelClass;
@@ -61,10 +57,8 @@ public class CalculateTripFeesSteps {
 
     @When("^the customer asked for the trip price")
     public void the_customer_asked_for_the_trip_price() {
-        Mockito.when(tripRepositoryPort.findTripByDestination(destination)).thenReturn(trip());
-
         try {
-            computedPrice = tripPricer.priceTrip(destination, travelClass);
+            computedPrice = tripPricer.priceTrip(travelClass, trip());
         } catch (BusinessException be) {
             Locale usLocale = new Locale("en", "US");
             Locale.setDefault(usLocale);
